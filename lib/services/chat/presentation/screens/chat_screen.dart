@@ -1,10 +1,10 @@
-import 'package:chat_app/core/resources/color_manger.dart';
+import 'package:chat_app/services/chat/business_logic/chat_cubit/chat_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../app/app_router.dart';
-import '../../../auth/business_logic/auth_provider.dart';
+import '../../../../core/resources/color_manger.dart';
 import '../widgets/chat_messages.dart';
 import '../widgets/message_textfield.dart';
 
@@ -16,12 +16,15 @@ class Chat extends StatelessWidget {
       appBar: const PreferredSize(
           preferredSize: Size.fromHeight(60),
           child: SignOutAppBar(isChat: true)),
-      body: Column(
-        children: const [
-          Expanded(child: ChatMessages()),
-          SizedBox(height: 5),
-          MessageTextField(),
-        ],
+      body: BlocProvider(
+        create: (context) => ChatCubit(),
+        child: Column(
+          children: const [
+            Expanded(child: ChatMessages()),
+            SizedBox(height: 5),
+            MessageTextField(),
+          ],
+        ),
       ),
       backgroundColor: const Color.fromARGB(255, 51, 53, 136),
     );
@@ -55,8 +58,7 @@ class SignOutAppBar extends StatelessWidget {
               onTap: () async {
                 try {
                   await FirebaseAuth.instance.signOut();
-                  // ignore: use_build_context_synchronously
-                  context.read<AuthProvider>().loadingSetter(false);
+
                   // ignore: use_build_context_synchronously
                   await Navigator.pushReplacementNamed(
                       context, RouteNames.authRoute);

@@ -1,10 +1,10 @@
-import 'package:chat_app/core/resources/color_manger.dart';
-import 'package:chat_app/core/resources/styles_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../business_logic/auth_provider.dart';
-import '../auth_screen.dart';
+import '../../../../core/enums.dart';
+import '../../../../core/resources/color_manger.dart';
+import '../../../../core/resources/styles_manager.dart';
+import '../../business_logic/ui_auth_state/ui_auth_cubit.dart';
 
 class SwitchAuthModeButton extends StatefulWidget {
   const SwitchAuthModeButton({Key? key}) : super(key: key);
@@ -17,9 +17,9 @@ class _SwitchAuthModeButtonState extends State<SwitchAuthModeButton> {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () => context.read<AuthProvider>().switchMode(),
+      onPressed: () => context.read<UIAuthCubit>().switchMode(),
       child: Text(
-          context.watch<AuthProvider>().authMode == AuthMode.signIn
+          context.watch<UIAuthCubit>().authMode == AuthMode.signIn
               ? 'Sign up'
               : 'Sign In',
           style: getMediumStyle(color: ColorManager.secondaryColor)),

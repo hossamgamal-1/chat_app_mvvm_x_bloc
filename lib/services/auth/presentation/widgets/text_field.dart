@@ -1,11 +1,11 @@
-import 'package:chat_app/core/resources/styles_manager.dart';
+import 'package:chat_app/services/chat/business_logic/chat_cubit/chat_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/enums.dart';
 import '../../../../core/resources/color_manger.dart';
-import '../../../chat/business_logic/chat_provider.dart';
-import '../../business_logic/auth_provider.dart';
-import '../auth_screen.dart';
+import '../../../../core/resources/styles_manager.dart';
+import '../../business_logic/ui_auth_state/ui_auth_cubit.dart';
 
 class CustomTextField extends StatelessWidget {
   CustomTextField(
@@ -64,27 +64,26 @@ class CustomTextField extends StatelessWidget {
           filled: true,
           suffixIcon: type == 'Password' ||
                   (type == 'repeatPassword' &&
-                      context.read<AuthProvider>().authMode == AuthMode.signUp)
+                      context.read<UIAuthCubit>().authMode == AuthMode.signUp)
               ? IconButton(
                   splashRadius: 1,
-                  onPressed: () => context.read<AuthProvider>().eyeToggle(),
-                  icon: Icon(context.watch<AuthProvider>().eye,
+                  onPressed: () => context.read<UIAuthCubit>().eyeToggle(),
+                  icon: Icon(context.watch<UIAuthCubit>().eye,
                       color: Colors.white))
               : null,
           errorStyle: const TextStyle(color: Color.fromARGB(255, 179, 12, 0))),
       obscureText: type == 'Password' ||
               (type == 'repeatPassword' &&
-                  context.read<AuthProvider>().authMode == AuthMode.signUp)
-          ? context.watch<AuthProvider>().secured
+                  context.read<UIAuthCubit>().authMode == AuthMode.signUp)
+          ? context.watch<UIAuthCubit>().secured
           : false,
-      onChanged: type == 'Message'
-          ? context.read<ChatProvider>().sendMessageIcon
-          : null,
+      onChanged:
+          type == 'Message' ? context.read<ChatCubit>().sendMessageIcon : null,
       style: getRegularStyle(color: ColorManager.white),
       validator: type == 'Username'
           ? (String? username) => username == null ||
                   username.length < 6 &&
-                      context.read<AuthProvider>().authMode == AuthMode.signUp
+                      context.read<UIAuthCubit>().authMode == AuthMode.signUp
               ? 'User Name must be at least 6 letters'
               : null
           : type == 'Email'
@@ -100,20 +99,20 @@ class CustomTextField extends StatelessWidget {
                       ? (String? repeatPassword) => repeatPassword == null ||
                               repeatPassword !=
                                       CustomTextField.passwordController.text &&
-                                  context.read<AuthProvider>().authMode ==
+                                  context.read<UIAuthCubit>().authMode ==
                                       AuthMode.signUp
                           ? 'Passwords are not the same'
                           : null
                       : null,
       onSaved: type == 'Username'
           ? (String? username) =>
-              context.read<AuthProvider>().userName = username
+              context.read<UIAuthCubit>().userName = username
           : type == 'Email'
               ? (String? emailAddress) =>
-                  context.read<AuthProvider>().emailAddress = emailAddress
+                  context.read<UIAuthCubit>().emailAddress = emailAddress
               : type == 'Password'
                   ? (String? password) =>
-                      context.read<AuthProvider>().password = password
+                      context.read<UIAuthCubit>().password = password
                   : null,
       controller: data[type]['controller'],
     );

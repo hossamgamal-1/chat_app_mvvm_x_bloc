@@ -1,16 +1,21 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ChatProvider with ChangeNotifier {
+import 'chat_state.dart';
+
+class ChatCubit extends Cubit<ChatState> {
+  ChatCubit() : super(ChatInitial());
+
   String currentMessage = '';
   sendMessageIcon(newString) {
     currentMessage = newString;
-    notifyListeners();
+    emit(ChatPrepare());
   }
 
   messageReset() {
     currentMessage = '';
-    notifyListeners();
+    emit(ChatInitial());
   }
 
   final ScrollController scrollController = ScrollController();
@@ -24,9 +29,8 @@ class ChatProvider with ChangeNotifier {
 
   DocumentSnapshot<Map<String, dynamic>>? otheruserData;
   otherUserData(String otherUserID) async {
-    // print(otherUserID);
     var x = FirebaseFirestore.instance.collection('users').doc(otherUserID);
     otheruserData = await x.get();
-    notifyListeners();
+    emit(ChatSuccess());
   }
 }

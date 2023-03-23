@@ -1,10 +1,12 @@
-import 'package:chat_app/services/auth/presentation/auth_screen.dart';
-import 'package:chat_app/services/chat/presentation/screens/chat_screen.dart';
-import 'package:chat_app/services/chat/presentation/screens/sub_chat_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../core/resources/string_manager.dart';
+import '../services/auth/presentation/auth_screen.dart';
+import '../services/chat/presentation/screens/chat_screen.dart';
+import '../services/chat/presentation/screens/sub_chat_screen.dart';
+
 class RouteNames {
-  static const String authRoute = '/auth'; //
+  static const String authRoute = '/auth';
   static const String subChatRoute = '/'; //subChat
   static const String chatRoute = '/chat';
 }
@@ -31,7 +33,7 @@ class NoRouteFound extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('NO ROUTE FOUND'), // TODO: Centralization
+        title: const Text(StringManager.noRoutePlaceholder),
       ),
     );
   }

@@ -1,9 +1,9 @@
+import 'package:chat_app/services/auth/business_logic/logic_auth_cubit/Logic_auth_cubit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../auth/business_logic/auth_provider.dart';
-import '../../business_logic/chat_provider.dart';
+import '../../business_logic/chat_cubit/chat_cubit.dart';
 import 'recieved_message_tile.dart';
 import 'sent_message_tile.dart';
 
@@ -26,12 +26,12 @@ class ChatMessages extends StatelessWidget {
           final List<QueryDocumentSnapshot<Map<String, dynamic>>> docs =
               snapShots.data!.docs;
           return SingleChildScrollView(
-              controller: context.watch<ChatProvider>().scrollController,
+              controller: context.watch<ChatCubit>().scrollController,
               child: Column(
                   children: docs
                       .map<Widget>((snapShotItem) {
                         return snapShotItem['senderId'] ==
-                                context.read<AuthProvider>().currentUserUID
+                                context.read<LogicAuthCubit>().currentUserUID
                             ? Container(
                                 alignment: Alignment.centerRight,
                                 child: SentMessageTile(snapShotItem),

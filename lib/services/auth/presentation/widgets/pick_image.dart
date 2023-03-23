@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../business_logic/auth_provider.dart';
-import '../auth_screen.dart';
+import '../../../../core/enums.dart';
+import '../../business_logic/ui_auth_state/ui_auth_cubit.dart';
 
 class PickImage extends StatelessWidget {
   const PickImage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    UIAuthCubit watch = context.watch<UIAuthCubit>();
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       constraints: BoxConstraints(
-        minHeight: context.watch<AuthProvider>().authMode == AuthMode.signUp
-            ? 15.h
-            : 0,
-        maxHeight: context.watch<AuthProvider>().authMode == AuthMode.signUp
-            ? 15.h
-            : 0,
+        minHeight: watch.authMode == AuthMode.signUp ? 15.h : 0,
+        maxHeight: watch.authMode == AuthMode.signUp ? 15.h : 0,
       ),
       child: FittedBox(
         child: Column(
@@ -27,9 +24,8 @@ class PickImage extends StatelessWidget {
             CircleAvatar(
               radius: 7.w,
               backgroundColor: const Color(0xff8E94FF),
-              backgroundImage: context.watch<AuthProvider>().image != null
-                  ? FileImage(context.watch<AuthProvider>().image!)
-                  : null,
+              backgroundImage:
+                  watch.image != null ? FileImage(watch.image!) : null,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -61,7 +57,7 @@ class PickImage extends StatelessWidget {
     IconData icon,
   ) {
     return TextButton.icon(
-      onPressed: () => context.read<AuthProvider>().getImage(route),
+      onPressed: () => context.read<UIAuthCubit>().getImage(route),
       icon: Icon(icon, color: Colors.white),
       label: Container(
           constraints: BoxConstraints(maxWidth: 20.w),
