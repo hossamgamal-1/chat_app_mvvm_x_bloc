@@ -4,6 +4,6 @@ import '../data/web_services.dart';
 
 final sL = GetIt.instance;
 
-gitInit() {
+void gitInit() {
   sL.registerLazySingleton<BaseWebServices>(() => WebServices());
 }

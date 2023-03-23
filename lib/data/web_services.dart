@@ -11,11 +11,8 @@ class WebServices implements BaseWebServices {
   @override
   Future<String> signInWithEmailAndPassword(
       {required String emailAddress, required String password}) async {
-    final userCredential =
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: emailAddress,
-      password: password,
-    );
+    final userCredential = await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: emailAddress, password: password);
     return userCredential.user!.uid;
   }
 
